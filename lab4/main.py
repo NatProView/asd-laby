@@ -1,3 +1,6 @@
+from colorama import Fore
+from colorama import Style
+
 # napisane na podstawie pseudokodu dr Pączkowskiego oraz przykładu na stronie www.geeksforgeeks.org
 
 def lcs(X, Y, m, n):
@@ -5,6 +8,8 @@ def lcs(X, Y, m, n):
     # przygotowuje wielkość listy L na podstawie długości dwóch ciągów znaków
     L = [[0 for x in range(n + 1)] for x in range(m + 1)]
  
+
+    
     for i in range(m + 1):
         for j in range(n + 1):
             if i == 0 or j == 0:
@@ -35,10 +40,11 @@ def lcs(X, Y, m, n):
             j -= 1
     
     # wyswietl tabelke pomocnicza 
-    # TODO dodaj zaznaczanie indeksow
+    # TODO dodaj zaznaczanie indeksow np przez krotke albo obiekt z boolem
+
     for i in range(len(L)):
         print(L[i])
- 
+
     print ("LCS of " + X + " and " + Y + " is " + "".join(lcs))
 
 

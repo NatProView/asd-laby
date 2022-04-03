@@ -49,7 +49,7 @@ def lcs(X, Y, m, n):
 
 
 print("Would you like to compare two strings from files or provide them yourself in the terminal?")
-temp = int(input("1 - from files\n2 - provide them yourself"))
+temp = int(input("1 - from files\n2 - provide them yourself\n"))
 if temp == 1:
     # założyłem, że można hardcode'ować nazwy plików
     with open('x', 'r') as x_file, open('y', 'r') as y_file:
@@ -58,8 +58,8 @@ if temp == 1:
         m = len(X)
         n = len(Y)
 if temp == 2:
-    X = str(input("Provide first string"))
-    Y = str(input("Provide second string"))
+    X = str(input("Provide first string:\n"))
+    Y = str(input("Provide second string:\n"))
     m = len(X)
     n = len(Y)
 

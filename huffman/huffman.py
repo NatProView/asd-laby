@@ -1,4 +1,11 @@
 import pickle
+from termcolor import colored
+# original code taken from:
+# https://github.com/YCAyca/Data-Structures-and-Algorithms-with-Python/tree/main/Huffman_Encoding
+
+def print_green(string):
+    print(colored(string, 'green'))
+
 
 # A Huffman Tree Node
 class Node:
@@ -18,7 +25,7 @@ class Node:
         # tree direction (0/1)
         self.code = ''
 
-""" A helper function to print the codes of symbols by traveling Huffman Tree"""
+# A helper function to print the codes of symbols by traveling Huffman Tree
 codes = dict()
 
 def Calculate_Codes(node, val=''):
@@ -35,7 +42,7 @@ def Calculate_Codes(node, val=''):
          
     return codes        
 
-""" A helper function to calculate the probabilities of symbols in given data"""
+# A helper function to calculate the probabilities of symbols in given data
 def Calculate_Probability(data):
     symbols = dict()
     for element in data:
@@ -45,17 +52,16 @@ def Calculate_Probability(data):
             symbols[element] += 1     
     return symbols
 
-""" A helper function to obtain the encoded output"""
+# A helper function to obtain the encoded output
 def Output_Encoded(data, coding):
     encoding_output = []
     for c in data:
-      #  print(coding[c], end = '')
         encoding_output.append(coding[c])
         
     string = ''.join([str(item) for item in encoding_output])    
     return string
         
-""" A helper function to calculate the space difference between compressed and non compressed data"""    
+# A helper function to calculate the space difference between compressed and non compressed data
 def Total_Gain(data, coding):
     before_compression = len(data) * 8 # total bit space to stor the data before compression
     after_compression = 0
@@ -65,7 +71,7 @@ def Total_Gain(data, coding):
         after_compression += count * len(coding[symbol]) #calculate how many bit is required for that symbol in total
     print("Space usage before compression (in bits):", before_compression)    
     print("Space usage after compression (in bits):",  after_compression) 
-    print("compression ratio:", after_compression/before_compression)          
+    print(colored("COMPRESSION RATIO: ", 'red'), round(after_compression/before_compression, 2), "%")         
 
 def Huffman_Encoding(data):
     symbol_with_probs = Calculate_Probability(data)
@@ -101,7 +107,9 @@ def Huffman_Encoding(data):
         nodes.append(newNode)
             
     huffman_encoding = Calculate_Codes(nodes[0])
-    print("symbols with codes", huffman_encoding)
+    # print("symbols with codes", huffman_encoding)
+    for key in huffman_encoding:
+        print(f"{key} : {huffman_encoding[key]}")
     Total_Gain(data, huffman_encoding)
     encoded_output = Output_Encoded(data,huffman_encoding)
     return encoded_output, nodes[0]  
@@ -125,21 +133,14 @@ def Huffman_Decoding(encoded_data, huffman_tree):
     string = ''.join([str(item) for item in decoded_output])
     return string        
 
-
-# """ First Test """
-# data = "AAAAAAABCCCCCCDDEEEEE"
-# print(data)
-# encoding, tree = Huffman_Encoding(data)
-# print("Encoded output", encoding)
-# print("Decoded Output", Huffman_Decoding(encoding,tree))
-
-print("Provide name of the file you want to load (without .txt extension)")
+print_green("Provide name of the file you want to load (without .txt extension)")
 file_name = input()
 with open(file_name + ".txt", 'r') as file:
     data = file.read()
-print(data)
 
-print("Do you want to encode or decode the file? [encode/decode]")
+print(colored("Loaded text: ", 'green'), data)
+
+print(colored("Do you want to encode or decode the file? [encode/decode]", 'green'))
 choice = input()
 
 if choice == "encode":
@@ -147,16 +148,17 @@ if choice == "encode":
     dumped_file_name = file_name + "_tree"
     with open(dumped_file_name, "wb") as dumped_file:
         pickle.dump(tree, dumped_file)
-        print(f"key to decode the file has been dumped to {dumped_file_name}")
-    print("Encoded output", encoding)
+        # print(f"key to decode the file has been dumped to {dumped_file_name}")
+        print(colored("Key to decode the file has been dumpted to:", 'green'), dumped_file_name)
+    print(colored("Encoded:", 'green'), encoding)
     encoded_file_name = file_name + "_encoded.txt"
     with open(encoded_file_name, "w") as encoded_file:
         encoded_file.write(encoding)
-        print(f"Encoding saved to {encoded_file_name}")
+        print(colored("Encoding saved to:", 'green'), encoded_file_name)
 
 if choice == "decode":
-    print('Provide name of the file containing key you want to use')
+    print(colored('Provide name of the file containing key you want to use', 'green'))
     file_with_key_name = input()
     with open(file_with_key_name, "rb") as file_with_key:
         tree = pickle.load(file_with_key)
-    print("Decoded Output", Huffman_Decoding(data,tree))
+    print(colored("Decoded:", 'green'), Huffman_Decoding(data, tree))
